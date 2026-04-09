@@ -2,43 +2,6 @@
 
 A complete full-stack web application for managing residential complaints and feedback in apartment complexes.
 
-## Installation & Setup
-
-### Prerequisites
-- Node.js (v14+)
-- MongoDB (running locally or cloud connection)
-- npm
-
-### Steps
-
-1. **Navigate to project directory:**
-   ```bash
-   cd apartment-complaint-system
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Configure MongoDB:**
-   - Update `.env` file with your MongoDB connection string
-   - Default: `mongodb://localhost:27017/apartment-complaints`
-   - For MongoDB Atlas, replace with your connection string
-
-4. **Start the server:**
-   ```bash
-   npm start
-   ```
-   Or for development with auto-reload:
-   ```bash
-   npm run dev
-   ```
-
-5. **Access the application:**
-   - Open browser and go to `http://localhost:5000`
-
-## Features
 
 ### 🏠 Resident Features
 - **User Authentication**: Secure signup and login with JWT
