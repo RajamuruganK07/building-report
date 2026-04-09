@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apartment Complaint & Management System</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Title at Top Center -->
+    <div class="top-header">
+      <h1 class="app-title">🏢 APARTMENT COMPLAINT SYSTEM</h1>
+    </div>
+
+    <!-- Layout Container: Sidebar + Main Content -->
+    <div class="layout-wrapper">
+      <!-- Left Sidebar Navigation -->
+      <aside class="sidebar" id="navMenu">
+        <button class="sidebar-btn" onclick="openCreateAccount()">➕ Create Account</button>
+        <button class="sidebar-btn" onclick="showSection('dashboard')" id="dashboardBtn" style="display:none;">🏠 Dashboard</button>
+        <button class="sidebar-btn" onclick="showSection('complaint')" id="complaintMenuBtn" style="display:none;">📝 Submit Complaint</button>
+        <button class="sidebar-btn" onclick="showSection('feedback')" id="feedbackMenuBtn" style="display:none;">💬 Feedback</button>
+        <button class="sidebar-btn" onclick="showSection('myComplaints')" id="myComplaintsMenuBtn" style="display:none;">📂 My Complaints</button>
+        <button class="sidebar-btn" onclick="showSection('admin')" id="adminMenuBtn" style="display:none;">⚙️ Admin Panel</button>
+        <button class="sidebar-btn logout-btn" onclick="logout()" id="logoutBtn" style="display:none;">🚪 Logout</button>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+
+      <!-- First Page: Quick Login/Create -->
+      <section id="quickAccess" class="section active">
+        <div class="form-container glass-container quick-access-container">
+          <h2>Welcome</h2>
+          <p class="form-subtext">Login or create account with username and password</p>
+
+          <form id="quickAccessForm" onsubmit="handleQuickLogin(event)">
+            <input type="text" placeholder="Username or Email" id="quickUsername" required>
+            <input type="password" placeholder="Password" id="quickPassword" required>
+
+            <div class="quick-actions">
+              <button type="submit" class="btn btn-primary">Sign In</button>
+              <button type="button" class="btn btn-secondary" onclick="goToCreateAccount()">Create Account</button>
+            </div>
+
+            <p id="quickMessage"></p>
+          </form>
+        </div>
+      </section>
+      
+      <!-- Authentication Section -->
+      <section id="auth" class="section">
+        <div class="auth-container">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="toggleAuthTab('login')">Sign In</button>
+            <button class="tab-btn" onclick="toggleAuthTab('signup')">Create Account</button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="loginForm" class="form active auth-form" onsubmit="handleLogin(event)">
+            <h2>Welcome Back</h2>
+            <p class="form-subtext">Sign in to access your account and manage your complaints</p>
+
+            <input type="text" placeholder="Username or Email" id="loginEmail" required>
+            <input type="password" placeholder="Password" id="loginPassword" required>
+
+            <button type="submit" class="btn btn-primary">Sign In</button>
+            <p class="login-link">New here? <a href="#" onclick="toggleAuthTab('signup'); return false;">Create an account</a></p>
+            <p id="loginMessage"></p>
+          </form>
+
+          <!-- Signup Form -->
+          <form id="signupForm" class="form auth-form" onsubmit="handleSignup(event)">
+            <h2>Create Your Account</h2>
+            <p class="form-subtext">Register to access apartment complaint services</p>
+            
+            <input type="text" placeholder="Full Name" id="signupFullName" required>
+            <input type="text" placeholder="Username" id="signupUsername" required>
+            <input type="number" placeholder="Age" id="signupAge" required>
+            <input type="text" placeholder="Door Number" id="signupDoor" required>
+            <input type="text" placeholder="Flat Number" id="signupFlat" required>
+            <input type="tel" placeholder="Mobile Number" id="signupMobile" required>
+            <input type="email" placeholder="Email Address" id="signupEmail" required>
+            <input type="password" placeholder="Password" id="signupPassword" required>
+            
+            <button type="submit" class="btn btn-primary">Create Account</button>
+                        <p class="login-link">Already a member? <a href="#" onclick="toggleAuthTab('login'); return false;">Login here</a></p>
+            <p id="signupMessage"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- Submit Complaint Section -->
+      <section id="complaint" class="section">
+        <div class="form-container glass-container">
+          <h2>📝 Raise a Complaint</h2>
+          <p class="form-subtext">Report your issue clearly to ensure faster resolution</p>
+          <form id="complaintForm" onsubmit="handleComplaintSubmit(event)">
+            <input type="text" placeholder="Full Name" id="complaintName" required readonly>
+            <input type="number" placeholder="Age" id="complaintAge" readonly>
+            <input type="tel" placeholder="Mobile Number" id="complaintMobile" readonly>
+            <input type="text" placeholder="Flat Number" id="complaintFlat" required>
+            
+            <select id="complaintCategory" required>
+              <option value="">Select Complaint Category</option>
+              <option value="Parking">🅿️ Parking Issue</option>
+              <option value="Maintenance">🔧 Maintenance</option>
+              <option value="Noise">🔊 Noise</option>
+              <option value="Water/Electricity">💧 Water/Electricity</option>
+              <option value="Security">🔐 Security</option>
+              <option value="Other">📌 Other</option>
+            </select>
+
+            <select id="complaintPriority" required>
+              <option value="Medium" selected>Priority: Medium</option>
+              <option value="Low">Priority: Low</option>
+              <option value="High">Priority: High</option>
+            </select>
+
+            <p class="helper-text">Please provide detailed information about your issue</p>
+            <textarea id="complaintDescription" placeholder="Describe your complaint in detail..." required minlength="10" rows="6"></textarea>
+
+            <label class="upload-label" for="complaintEvidence">Upload Evidence (Optional)</label>
+            <input type="file" id="complaintEvidence" accept="image/*">
+            <p class="upload-help">Attach an image if available to support your complaint</p>
+            
+            <button type="submit" class="btn btn-primary">Submit Complaint</button>
+            <p id="complaintMessage"></p>
+          </form>
+
+          <div class="status-system glass-subcard">
+            <h3>Complaint Status</h3>
+            <div class="status-item">
+              <strong>Pending</strong>
+              <p>Your complaint has been received and is under review</p>
+            </div>
+            <div class="status-item">
+              <strong>In Progress</strong>
+              <p>Our team is currently working on your issue</p>
+            </div>
+            <div class="status-item">
+              <strong>Resolved</strong>
+              <p>Your issue has been successfully resolved</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feedback Section -->
+      <section id="feedback" class="section">
+        <div class="form-container glass-container">
+          <h2>💬 Share Your Feedback</h2>
+          <p class="form-subtext">Help us improve our services and your living experience</p>
+          <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
+            <input type="text" placeholder="Name" id="feedbackName" required>
+            <input type="text" placeholder="Flat Number" id="feedbackFlat" required>
+            
+            <select id="feedbackCategory" required>
+              <option value="">Select Category</option>
+              <option value="Management">👥 Management</option>
+              <option value="Maintenance">🔧 Maintenance</option>
+              <option value="Security">🔐 Security</option>
+              <option value="Community">🤝 Community</option>
+              <option value="Other">📌 Other</option>
+            </select>
+
+            <div class="rating-group">
+              <label>Rate Your Experience:</label>
+              <div class="rating-stars">
+                <span class="star" onclick="setRating(1)" data-value="1">⭐</span>
+                <span class="star" onclick="setRating(2)" data-value="2">⭐</span>
+                <span class="star" onclick="setRating(3)" data-value="3">⭐</span>
+                <span class="star" onclick="setRating(4)" data-value="4">⭐</span>
+                <span class="star" onclick="setRating(5)" data-value="5">⭐</span>
+              </div>
+              <div id="ratingValue">Rating: 0/5</div>
+            </div>
+
+            <textarea id="feedbackComments" placeholder="Share your feedback and suggestions..." required minlength="10" rows="6"></textarea>
+
+            <label class="checkbox">
+              <input type="checkbox" id="feedbackAnonymous">
+              Submit anonymously
+            </label>
+
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            <p id="feedbackMessage"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- My Complaints Section -->
+      <section id="myComplaints" class="section">
+        <div class="list-container glass-container">
+          <h2>My Complaints</h2>
+          <div id="complaintsList" class="table-wrapper">
+          <p class="auto-fill-note">Resident details will be added automatically from your account</p>
+            <table class="complaints-table">
+            <input type="hidden" id="complaintName">
+            <input type="hidden" id="complaintAge">
+            <input type="hidden" id="complaintMobile">
+            <input type="hidden" id="complaintFlat">
+                  <th>Age</th>
+                  <th>Mobile Number</th>
+                  <th>Category</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="complaintsTableBody">
+                <tr><td colspan="7" class="loading">Loading complaints...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="rating-system glass-subcard">
+            <h3>⭐ Rate Our Service</h3>
+            <p>How satisfied are you with the resolution of your complaint?</p>
+            <ul>
+              <li>⭐ Very Poor</li>
+              <li>⭐⭐ Poor</li>
+              <li>⭐⭐⭐ Average</li>
+              <li>⭐⭐⭐⭐ Good</li>
+              <li>⭐⭐⭐⭐⭐ Excellent</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="section">
+        <div class="dashboard-container glass-container">
+          <h2>🏠 Welcome to Your Apartment Dashboard</h2>
+          <p class="form-subtext">Manage complaints, track their status, and stay updated with ease</p>
+          
+          <div class="dashboard-grid">
+            <div class="dashboard-card">
+              <h3>📝 Total Complaints</h3>
+              <p class="dashboard-stat" id="dashboardTotal">0</p>
+            </div>
+            <div class="dashboard-card">
+              <h3>⏳ Pending</h3>
+              <p class="dashboard-stat" id="dashboardPending">0</p>
+            </div>
+            <div class="dashboard-card">
+              <h3>✅ Resolved</h3>
+              <p class="dashboard-stat" id="dashboardResolved">0</p>
+            </div>
+            <div class="dashboard-card">
+              <h3>💬 Feedback Submitted</h3>
+              <p class="dashboard-stat" id="dashboardFeedback">0</p>
+            </div>
+          </div>
+
+          <div class="dashboard-actions">
+            <button class="btn btn-primary" onclick="showSection('complaint')" style="width: auto;">📝 Submit New Complaint</button>
+            <button class="btn btn-primary" onclick="showSection('feedback')" style="width: auto;">💬 Share Feedback</button>
+            <button class="btn btn-primary" onclick="showSection('myComplaints')" style="width: auto;">📂 View My Complaints</button>
+          </div>
+
+          <div class="quick-tools">
+            <span>🌙 Switch Theme</span>
+            <span>🔎 Search Complaints</span>
+            <span>⚙️ Settings</span>
+            <span>🚪 Logout</span>
+          </div>
+
+          <div class="notifications glass-subcard">
+            <h3>🔔 Notifications</h3>
+            <ul>
+              <li>Your complaint has been received</li>
+              <li>Your complaint is now in progress</li>
+              <li>Your issue has been resolved</li>
+              <li>Admin has responded to your complaint</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Admin Panel Section -->
+      <section id="admin" class="section">
+        <div class="admin-container">
+          <h2>⚙️ Admin Panel</h2>
+          
+          <!-- Statistics -->
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+              <h3>Total Complaints</h3>
+              <p class="stat-number" id="totalComplaints">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Pending</h3>
+              <p class="stat-number" id="pendingComplaints">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Resolved</h3>
+              <p class="stat-number" id="resolvedComplaints">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Total Users</h3>
+              <p class="stat-number" id="totalUsers">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Feedback Received</h3>
+              <p class="stat-number" id="totalFeedback">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Avg Rating</h3>
+              <p class="stat-number" id="avgRating">0</p>
+            </div>
+          </div>
+
+          <!-- Admin Tabs -->
+          <div class="admin-tabs">
+            <button class="admin-tab-btn active" onclick="showAdminTab('complaints')">All Complaints</button>
+            <button class="admin-tab-btn" onclick="showAdminTab('feedback')">All Feedback</button>
+          </div>
+
+          <!-- All Complaints Tab -->
+          <div id="complaintsTab" class="admin-tab-content active">
+            <h3>All Complaints</h3>
+            <div id="adminComplaintsList" class="list-items">
+              <p class="loading">Loading complaints...</p>
+            </div>
+          </div>
+
+          <!-- All Feedback Tab -->
+          <div id="feedbackTab" class="admin-tab-content">
+            <h3>All Feedback</h3>
+            <div id="adminFeedbackList" class="list-items">
+              <p class="loading">Loading feedback...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    </div><!-- End layout-wrapper -->
+  </div>
+
+  <footer class="app-footer">
+    “A smart and centralized platform designed to simplify complaint management and enhance communication within residential communities.”
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

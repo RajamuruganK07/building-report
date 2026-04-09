@@ -1,0 +1,38 @@
+target:
+  host: http://localhost:5000
+
+phases:
+  - duration: 60
+    arrivalRate: 10
+    name: Warm up
+  - duration: 120
+    arrivalRate: 50
+    name: Ramp up
+
+scenarios:
+  - name: Apartment System Load Test
+    weight: 100
+    flow:
+      - get:
+          url: /
+      - post:
+          url: /api/auth/login
+          json:
+            email: john@apartment.com
+            password: password123
+      - think: 5
+      - get:
+          url: /api/complaints/my-complaints
+      - post:
+          url: /api/complaints
+          json:
+            description: Load test complaint
+            category: Maintenance
+            priority: Medium
+      - think: 3
+      - post:
+          url: /api/feedback
+          json:
+            rating: 4
+            comments: Load testing feedback
+            category: Management
